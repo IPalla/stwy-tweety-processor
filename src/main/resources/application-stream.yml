@@ -1,0 +1,32 @@
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: rabbitmq
+    password: rabbitmq
+
+
+# Tweety streamer input
+spring.cloud.stream.bindings.tweety-streamer-input:
+  binder: rabbit
+  content-type: application/json
+  destination: tweety-streamer-output-exchange
+  consumer:
+    concurrency: 5
+    max-attempts: 1
+spring.cloud.stream.rabbit.bindings.tweety-streamer-input:
+  consumer:
+    autoBindDlq: true
+    republishToDlq: true
+    transacted: true
+    bindingRoutingKey: streamInTweets
+
+# Tweety processor output
+spring.cloud.stream.bindings.tweety-processor-output:
+  binder: rabbit
+  content-type: application/json
+  destination: tweety-processor-output-exchange
+spring.cloud.stream.rabbit.bindings.tweety-processor-output:
+  producer:
+    routingKeyExpression: ''''''
+    transacted: true
